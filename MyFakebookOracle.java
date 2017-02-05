@@ -126,14 +126,79 @@ public class MyFakebookOracle extends FakebookOracle {
     //      is a tie, include all in result)
     //
     public void findNameInfo() { // Query1
-        // Find the following information from your database and store the information as shown
-        this.longestFirstNames.add("JohnJacobJingleheimerSchmidt");
-        this.shortestFirstNames.add("Al");
-        this.shortestFirstNames.add("Jo");
-        this.shortestFirstNames.add("Bo");
-        this.mostCommonFirstNames.add("John");
-        this.mostCommonFirstNames.add("Jane");
-        this.mostCommonFirstNamesCount = 10;
+
+        try (Statement stmt =
+                     oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                             ResultSet.CONCUR_READ_ONLY)) {
+            //longest and shortest firstname
+            ResultSet rst = stmt.executeQuery("SELECT U.first_name, LENGTH(U.first_name) as lengthofFirstname
+                                               FROM " + userTableName + " U
+                                               GROUP BY U.first_name
+                                               ORDER BY LengthofFirstname DESC");
+
+            int max = 0;
+            while (rst.next()) {
+                int firstname = rst.getInt(1);
+                int length = rst.getInt(2);
+                if (rst.isFirst()){
+                    max = length;
+                }
+                else{
+                    if(length != max)
+                        break;
+                }
+                this.longestFirstNames.add(firstname);
+            }
+
+            rst.last();
+
+            int min = 0;
+            while (rst.previous()) {
+                int firstname = rst.getInt(1);
+                int length = rst.getInt(2);
+                if (rst.isLast()){
+                    min = length;
+                }
+                else{
+                    if(length != min)
+                        break;
+                }
+                this.shortestFirstNames.add(firstname);
+            }
+
+            this.mostCommonFirstNames.add("");
+            this.mostCommonFirstNames.add("");
+            this.mostCommonFirstNamesCount = 0;
+
+            // Get the names of users born in the "most" month
+            rst = stmt.executeQuery("SELECT U.first_name, COUNT(*) as numofName
+                                     FROM"+ userTableName +" U
+                                     GROUP BY U.first_name
+                                     ORDER BY numofName DESC");
+
+            int max = 0;
+            while (rst.next()) {
+                int firstname = rst.getInt(1);
+                int length = rst.getInt(2);
+                if (rst.isFirst()){
+                    max = length;
+                    this.mostCommonFirstNamesCount = max;
+                }
+                else{
+                    if(length != max)
+                        break;
+                }
+                this.mostCommonFirstNames.add(firstname);
+            }
+            // Close statement and result set
+            rst.close();
+            stmt.close();
+        } catch (SQLException err) {
+            System.err.println(err.getMessage());
+        }
+
+
+
     }
 
     @Override
@@ -187,7 +252,7 @@ public class MyFakebookOracle extends FakebookOracle {
     // (4) They are not friends with one another
     //
     // You should return up to n "match pairs"
-    // If there are more than n match pairs, you should break ties as follows:
+    // If there are more than n match pairs, you should break ties as followsU:
     // (i) First choose the pairs with the largest number of shared photos
     // (ii) If there are still ties, choose the pair with the smaller user1_id
     // (iii) If there are still ties, choose the pair with the smaller user2_id
