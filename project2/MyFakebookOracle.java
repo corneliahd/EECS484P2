@@ -346,11 +346,11 @@ public class MyFakebookOracle extends FakebookOracle {
                     u2UserId + " AND T1.TAG_PHOTO_ID = T2.TAG_PHOTO_ID AND T1.TAG_PHOTO_ID = P.PHOTO_ID AND P.ALBUM_ID = A.ALBUM_ID");
                 while (rs.next()) 
                 {
-                    String sharedPhotoId = rst.getString(1);
-                    String sharedPhotoAlbumId = rst.getString(2);
-                    String sharedPhotoAlbumName = rst.getString(3);
-                    String sharedPhotoCaption = rst.getString(4);
-                    String sharedPhotoLink = rst.getString(5);
+                    String sharedPhotoId = rs.getString(1);
+                    String sharedPhotoAlbumId = rs.getString(2);
+                    String sharedPhotoAlbumName = rs.getString(3);
+                    String sharedPhotoCaption = rs.getString(4);
+                    String sharedPhotoLink = rs.getString(5);
                     mp.addSharedPhoto(new PhotoInfo(sharedPhotoId, sharedPhotoAlbumId, sharedPhotoAlbumName, sharedPhotoCaption, sharedPhotoLink));
                 }
                 this.bestMatches.add(mp);
