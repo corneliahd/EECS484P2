@@ -18,35 +18,35 @@ public class TestFakebookOracle {
             FakebookOracle fbwz = new MyFakebookOracle(dataType, conn);
             OutputStreamWriter out = new OutputStreamWriter(System.out);
 
-            // // Query 0
-            // out.write(">>>>>>>>>Query0>>>>>>>>>>\n");
-            // fbwz.findMonthOfBirthInfo();
-            // fbwz.printMonthOfBirthInfo(out);
+            // Query 0
+            out.write(">>>>>>>>>Query0>>>>>>>>>>\n");
+            fbwz.findMonthOfBirthInfo();
+            fbwz.printMonthOfBirthInfo(out);
 
-            // // Query 1
-            // out.write(">>>>>>>>>Query1>>>>>>>>>>\n");
-            // fbwz.findNameInfo();
-            // fbwz.printNameInfo(out);
+            // Query 1
+            out.write(">>>>>>>>>Query1>>>>>>>>>>\n");
+            fbwz.findNameInfo();
+            fbwz.printNameInfo(out);
 
-            // // Query 2
-            // out.write(">>>>>>>>>Query2>>>>>>>>>>\n");
-            // fbwz.lonelyUsers();
-            // fbwz.printLonelyFriends(out);
+            // Query 2
+            out.write(">>>>>>>>>Query2>>>>>>>>>>\n");
+            fbwz.lonelyUsers();
+            fbwz.printLonelyFriends(out);
 
-            // // Query 3
-            // out.write(">>>>>>>>>Query3>>>>>>>>>>\n");
-            // fbwz.liveAwayFromHome();
-            // fbwz.printLiveAwayFromHome(out);
+            // Query 3
+            out.write(">>>>>>>>>Query3>>>>>>>>>>\n");
+            fbwz.liveAwayFromHome();
+            fbwz.printLiveAwayFromHome(out);
 
-            // // Query 4
-            // out.write(">>>>>>>>>Query4>>>>>>>>>>\n");
-            // fbwz.findPhotosWithMostTags(5);
-            // fbwz.printPhotosWithMostTags(out);
+            // Query 4
+            out.write(">>>>>>>>>Query4>>>>>>>>>>\n");
+            fbwz.findPhotosWithMostTags(5);
+            fbwz.printPhotosWithMostTags(out);
 
-            // // Query 5
-            // out.write(">>>>>>>>>Query5>>>>>>>>>>\n");
-            // fbwz.matchMaker(5, 2);
-            // fbwz.printBestMatches(out);
+            // Query 5
+            out.write(">>>>>>>>>Query5>>>>>>>>>>\n");
+            fbwz.matchMaker(5, 2);
+            fbwz.printBestMatches(out);
 
             // Query 6
             out.write(">>>>>>>>>Query6>>>>>>>>>>\n");
@@ -54,19 +54,19 @@ public class TestFakebookOracle {
             fbwz.printMutualFriendsInfo(out);
 
             // Query 7
-            // out.write(">>>>>>>>>Query7>>>>>>>>>>\n");
-            // fbwz.findEventStates();
-            // fbwz.printStateNames(out);
+            out.write(">>>>>>>>>Query7>>>>>>>>>>\n");
+            fbwz.findEventStates();
+            fbwz.printStateNames(out);
 
             // Query 8
-            // out.write(">>>>>>>>>Query8>>>>>>>>>>\n");
-            // fbwz.findAgeInfo(215L);
-            // fbwz.printAgeInfo(out);
+            out.write(">>>>>>>>>Query8>>>>>>>>>>\n");
+            fbwz.findAgeInfo(215L);
+            fbwz.printAgeInfo(out);
 
-            // // Query 9
-            // out.write(">>>>>>>>>Query9>>>>>>>>>>\n");
-            // fbwz.findPotentialSiblings();
-            // fbwz.printPotentialSiblings(out);
+            // Query 9
+            out.write(">>>>>>>>>Query9>>>>>>>>>>\n");
+            fbwz.findPotentialSiblings();
+            fbwz.printPotentialSiblings(out);
 
 
             conn.close();
