@@ -215,8 +215,10 @@ public class MyFakebookOracle extends FakebookOracle {
                 String lastName = rst.getString(3);
                 this.lonelyUsers.add(new UserInfo(uid, firstName, lastName));
                 }
+            rst.close();
+            stmt.close(); 
+        }
 
-        } 
         catch (SQLException err) 
         {
             System.err.println(err.getMessage());
@@ -243,6 +245,8 @@ public class MyFakebookOracle extends FakebookOracle {
                 String lastname = rst.getString(3);
                 this.liveAwayFromHome.add(new UserInfo(uid, firstname, lastname));
             }
+            rst.close();
+            stmt.close(); 
 
         } catch (SQLException err) {
                 System.err.println(err.getMessage());
@@ -284,7 +288,11 @@ public class MyFakebookOracle extends FakebookOracle {
                     tp.addTaggedUser(new UserInfo(uid, firstname, lastname));
                 }
                 this.photosWithMostTags.add(tp);
+                rs.close();
+                stm.close(); 
             }
+            rst.close();
+            stmt.close(); 
 
         } catch (SQLException err) {
                 System.err.println(err.getMessage());
@@ -369,13 +377,22 @@ public class MyFakebookOracle extends FakebookOracle {
             ResultSet rst = stmt.executeQuery("SELECT C.STATE_NAME, COUNT(*) AS EVENT_NUM FROM " + 
                 eventTableName + " E," + cityTableName + " C WHERE E.EVENT_CITY_ID = C.CITY_ID GROUP BY C.STATE_NAME ORDER BY EVENT_NUM DESC");
 
-            while (rst.next()) 
-            {
+            String stateName = rst.getString(1);
+            int count = rst.getInt(2);
+            int maxi = count;
+            this.eventCount = count;
+            this.popularStateNames.add(stateName);
+
+            while (rst.next()) {
                 String stateName = rst.getString(1);
-                this.eventCount = rst.getInt(2);
+                int count = rst.getInt(2);
+                if(count != maxi)
+                    break;
+                this.eventCount = count;
                 this.popularStateNames.add(stateName);
             }
-
+            rst.close();
+            stmt.close(); 
         } 
         catch (SQLException err) 
         {
