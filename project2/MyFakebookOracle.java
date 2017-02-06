@@ -159,6 +159,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 if (rst.isLast()){
                     min = length;
                 }
+                System.out.println(min);
                 else{
                     if(length != min)
                         break;
