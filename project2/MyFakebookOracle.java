@@ -414,11 +414,11 @@ public class MyFakebookOracle extends FakebookOracle {
             while (rst.next()) 
             {
                 Long user1_id = rst.getLong(1);
-                String user1FirstName = rs.getString(2);
-                String user1LastName = rs.getString(3);
+                String user1FirstName = rst.getString(2);
+                String user1LastName = rst.getString(3);
                 Long user2_id = rst.getLong(4);
-                String user2FirstName = rs.getString(5);
-                String user2LastName = rs.getString(6);
+                String user2FirstName = rst.getString(5);
+                String user2LastName = rst.getString(6);
                 // Statement stm = oracleConnection.createStatement();
                 // ResultSet rs = stm.executeQuery("SELECT U1.FIRST_NAME, U1.LAST_NAME, U2.FIRST_NAME, U2.LAST_NAME FROM " +
                 //     userTableName + " U1," +
