@@ -136,7 +136,8 @@ public class MyFakebookOracle extends FakebookOracle {
 
             int max = 0;
 
-            rst.last();
+            rst.afterLast();
+            rst.previous();
             int min = rst.getInt(2);
 
             rst.beforeFirst();
