@@ -263,7 +263,7 @@ public class MyFakebookOracle extends FakebookOracle {
             ResultSet rst = stmt.executeQuery("SELECT DISTINCT T.TAG_PHOTO_ID, A.ALBUM_ID, A.ALBUM_NAME, P.PHOTO_CAPTION, P.PHOTO_LINK FROM "
                 +tagTableName+" T, "+photoTableName+" P, "
                 +albumTableName+" A WHERE P.PHOTO_ID = T.TAG_PHOTO_ID AND P.ALBUM_ID = A.ALBUM_ID AND T.TAG_PHOTO_ID = ANY( SELECT DISTINCT TAG_PHOTO_ID FROM(  SELECT DISTINCT T.TAG_PHOTO_ID, COUNT(T.TAG_PHOTO_ID) AS TAGNUM FROM "
-                +tagTableName+" T GROUP BY T.TAG_PHOTO_ID ORDER BY TAGNUM DESC, T.TAG_PHOTO_ID ASC ) WHERE ROWNUM <= "+ n +") ORDER BY T.TAG_PHOTO_ID ASC");
+                +tagTableName+" T GROUP BY T.TAG_PHOTO_ID ORDER BY TAGNUM DESC, T.TAG_PHOTO_ID ASC ) WHERE ROWNUM <= 5) ORDER BY T.TAG_PHOTO_ID ASC");
             
             while (rst.next()){
                 String photoId = rst.getString(1);
@@ -283,6 +283,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 }
                 this.photosWithMostTags.add(tp);
             }
+
         } catch (SQLException err) {
                 System.err.println(err.getMessage());
         }
@@ -359,9 +360,25 @@ public class MyFakebookOracle extends FakebookOracle {
     // events in that state.  If there is a tie, return the names of all of the (tied) states.
     //
     public void findEventStates() {
-        this.eventCount = 12;
-        this.popularStateNames.add("Michigan");
-        this.popularStateNames.add("California");
+        this.eventCount = 0;
+
+        try (Statement stmt = oracleConnection.createStatement()) 
+        {
+            ResultSet rst = stmt.executeQuery("SELECT C.STATE_NAME, COUNT(*) AS EVENT_NUM FROM " + 
+                eventTableName + " E," + cityTableName + " C WHERE E.EVENT_CITY_ID = C.CITY_ID GROUP BY C.STATE_NAME ORDER BY EVENT_NUM DESC");
+
+            while (rst.next()) 
+            {
+                String stateName = rst.getString(1);
+                this.eventCount = rst.getInt(2);
+                this.popularStateNames.add(stateName);
+            }
+
+        } 
+        catch (SQLException err) 
+        {
+            System.err.println(err.getMessage());
+        }
     }
 
     //@Override
