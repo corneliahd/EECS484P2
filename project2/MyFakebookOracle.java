@@ -385,18 +385,6 @@ public class MyFakebookOracle extends FakebookOracle {
     @Override
 
     public void suggestFriendsByMutualFriends(int n) {
-        // Long user1_id = 123L;
-        // String user1FirstName = "User1FirstName";
-        // String user1LastName = "User1LastName";
-        // Long user2_id = 456L;
-        // String user2FirstName = "User2FirstName";
-        // String user2LastName = "User2LastName";
-        // UsersPair p = new UsersPair(user1_id, user1FirstName, user1LastName, user2_id, user2FirstName, user2LastName);
-
-        // p.addSharedFriend(567L, "sharedFriend1FirstName", "sharedFriend1LastName");
-        // p.addSharedFriend(678L, "sharedFriend2FirstName", "sharedFriend2LastName");
-        // p.addSharedFriend(789L, "sharedFriend3FirstName", "sharedFriend3LastName");
-        // this.suggestedUsersPairs.add(p);
 
         try (Statement stmt = oracleConnection.createStatement()) 
         {
@@ -411,7 +399,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 userTableName + " U2 WHERE U1.USER_ID < U2.USER_ID MINUS SELECT F.USER1_ID AS UID1, F.USER2_ID AS UID2 FROM " +
                 friendsTableName + " F )N WHERE N.UID1 = F1.ID1 AND N.UID2 = F2.ID1 AND F1.ID2 = F2.ID2 GROUP BY N.UID1, N.UID2 ORDER BY CommonFri DESC, N.UID1 ASC, N.UID2 ASC )A WHERE U1.USER_ID = A.UID1 AND U2.USER_ID = A.UID2 AND ROWNUM <= " +
                 n + " ORDER BY A.CommonFri DESC, A.UID1 ASC, A.UID2 ASC");
-            
+
             while (rst.next()) 
             {
                 Long user1_id = rst.getLong(1);
@@ -420,22 +408,23 @@ public class MyFakebookOracle extends FakebookOracle {
                 Long user2_id = rst.getLong(4);
                 String user2FirstName = rst.getString(5);
                 String user2LastName = rst.getString(6);
-                // Statement stm = oracleConnection.createStatement();
-                // ResultSet rs = stm.executeQuery("SELECT U1.FIRST_NAME, U1.LAST_NAME, U2.FIRST_NAME, U2.LAST_NAME FROM " +
-                //     userTableName + " U1," +
-                //     userTableName + " U2 WHERE U1.USER_ID = " + user1_id + " AND U2.USER_ID = " + user2_id);
-                // rs.next();
-                // rs.close();
-                // stm.close();
                 UsersPair p = new UsersPair(user1_id, user1FirstName, user1LastName, user2_id, user2FirstName, user2LastName);
 
                 Statement st = oracleConnection.createStatement();
+                // ResultSet r = st.executeQuery("SELECT A.ID, U.FIRST_NAME, U.LAST_NAME FROM " +
+                //     userTableName + " U, (((SELECT USER2_ID AS ID FROM " + 
+                //     friendsTableName + " F WHERE F.USER1_ID = " + user1_id + ") UNION (SELECT USER1_ID AS ID FROM " +
+                //     friendsTableName + " F WHERE F.USER2_ID = " + user1_id + ")) INTERSECT ((SELECT USER2_ID AS ID FROM " +
+                //     friendsTableName + " F WHERE F.USER1_ID = " + user2_id + ") UNION (SELECT USER1_ID AS ID FROM " +
+                //     friendsTableName + " F WHERE F.USER2_ID = " + user2_id + ")))A WHERE U.USER_ID = A.ID ORDER BY A.ID");
+
                 ResultSet r = st.executeQuery("SELECT A.ID, U.FIRST_NAME, U.LAST_NAME FROM " +
-                    userTableName + " U, (((SELECT USER2_ID AS ID FROM " + 
-                    friendsTableName + " F WHERE F.USER1_ID = " + user1_id + ") UNION (SELECT USER1_ID AS ID FROM " +
-                    friendsTableName + " F WHERE F.USER2_ID = " + user1_id + ")) INTERSECT ((SELECT USER2_ID AS ID FROM " +
-                    friendsTableName + " F WHERE F.USER1_ID = " + user2_id + ") UNION (SELECT USER1_ID AS ID FROM " +
-                    friendsTableName + " F WHERE F.USER2_ID = " + user2_id + ")))A WHERE U.USER_ID = A.ID ORDER BY A.ID");
+                    userTableName + " U, ( ( SELECT F1.USER2_ID AS ID FROM " +
+                    friendsTableName + " F1, " +
+                    friendsTableName + " F2 WHERE F1.USER1_ID = " + user1_id + " AND F2.USER1_ID = " + user2_id + " AND F1.USER2_ID = F2.USER2_ID ) UNION ( SELECT F1.USER1_ID AS ID FROM " +
+                    friendsTableName + " F1, " +
+                    friendsTableName + " F2 WHERE F1.USER2_ID = " + user1_id + " AND F2.USER2_ID = " + user2_id + " AND F1.USER1_ID = F2.USER1_ID ) )A WHERE U.USER_ID = A.ID ORDER BY A.ID");
+
                 while(r.next())
                 { 
                     Long uid = r.getLong(1);
