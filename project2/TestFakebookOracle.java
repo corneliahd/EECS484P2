@@ -28,20 +28,20 @@ public class TestFakebookOracle {
             // fbwz.findNameInfo();
             // fbwz.printNameInfo(out);
 
-            // Query 2
-            out.write(">>>>>>>>>Query2>>>>>>>>>>\n");
-            fbwz.lonelyUsers();
-            fbwz.printLonelyFriends(out);
+            // // Query 2
+            // out.write(">>>>>>>>>Query2>>>>>>>>>>\n");
+            // fbwz.lonelyUsers();
+            // fbwz.printLonelyFriends(out);
 
             // // Query 3
             // out.write(">>>>>>>>>Query3>>>>>>>>>>\n");
             // fbwz.liveAwayFromHome();
             // fbwz.printLiveAwayFromHome(out);
 
-            // // Query 4
-            // out.write(">>>>>>>>>Query4>>>>>>>>>>\n");
-            // fbwz.findPhotosWithMostTags(5);
-            // fbwz.printPhotosWithMostTags(out);
+            // Query 4
+            out.write(">>>>>>>>>Query4>>>>>>>>>>\n");
+            fbwz.findPhotosWithMostTags(5);
+            fbwz.printPhotosWithMostTags(out);
 
             // // Query 5
             // out.write(">>>>>>>>>Query5>>>>>>>>>>\n");

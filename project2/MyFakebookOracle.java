@@ -255,16 +255,41 @@ public class MyFakebookOracle extends FakebookOracle {
     // If there are ties, choose the photo with the smaller numeric PhotoID first
     //
     public void findPhotosWithMostTags(int n) {
-        String photoId = "1234567";
-        String albumId = "123456789";
-        String albumName = "album1";
-        String photoCaption = "caption1";
-        String photoLink = "http://google.com";
-        PhotoInfo p = new PhotoInfo(photoId, albumId, albumName, photoCaption, photoLink);
-        TaggedPhotoInfo tp = new TaggedPhotoInfo(p);
-        tp.addTaggedUser(new UserInfo(12345L, "taggedUserFirstName1", "taggedUserLastName1"));
-        tp.addTaggedUser(new UserInfo(12345L, "taggedUserFirstName2", "taggedUserLastName2"));
-        this.photosWithMostTags.add(tp);
+
+        try (Statement stmt =
+            oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)) {
+                   
+            ResultSet rst = stmt.executeQuery("SELECT DISTINCT T.TAG_PHOTO_ID, A.ALBUM_ID, A.ALBUM_NAME, P.PHOTO_CAPTION, P.PHOTO_LINK FROM "
+                +tagTableName+" T, "+photoTableName+" P, "
+                +albumTableName+" A WHERE P.PHOTO_ID = T.TAG_PHOTO_ID AND P.ALBUM_ID = A.ALBUM_ID AND T.TAG_PHOTO_ID = ANY( SELECT DISTINCT TAG_PHOTO_ID FROM(  SELECT DISTINCT T.TAG_PHOTO_ID, COUNT(T.TAG_PHOTO_ID) AS TAGNUM FROM "
+                +tagTableName+" T GROUP BY T.TAG_PHOTO_ID ORDER BY TAGNUM DESC, T.TAG_PHOTO_ID ASC ) WHERE ROWNUM <= 5) ORDER BY T.TAG_PHOTO_ID ASC");
+            
+            while (rst.next()){
+                Long photoId = rst.getLong(1);
+                Long albumId = rst.getLong(2);
+                String albumName = rst.getString(3);
+                String photoCaption = rst.getString(4);
+                String photoLink = rst.getString(5);
+                PhotoInfo p = new PhotoInfo(photoId, albumId, albumName, photoCaption, photoLink);
+                TaggedPhotoInfo tp = new TaggedPhotoInfo(p);
+                ResultSet rs = stmt.executeQuery("SELECT U.USER_ID, U.FIRST_NAME, U.LAST_NAME FROM "
+                    + tagTableName +" T, "+ userTableName +" U WHERE T.PHOTO_ID = "+ photoID +" AND T.TAG_SUBJECT_ID = U.USER_ID");
+                while (rs.next()){
+                    Long uid = rs.getLong(1);
+                    String firstname = rs.getString(2);
+                    String lastname = rs.getString(3);
+                    tp.addTaggedUser(new UserInfo(uid, firstname, lastname));
+                }
+                this.photosWithMostTags.add(tp);
+            }
+        } catch (SQLException err) {
+                System.err.println(err.getMessage());
+        }
+    }
+
+
+
     }
 
     @Override
