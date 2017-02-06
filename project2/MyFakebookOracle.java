@@ -155,6 +155,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 String firstname = rst.getString(1);
                 int length = rst.getInt(2);
                 System.out.println(length);
+                System.out.println(firstname);
                 if (rst.isLast()){
                     min = length;
                 }
