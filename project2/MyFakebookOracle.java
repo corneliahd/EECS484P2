@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class MyFakebookOracle extends FakebookOracle {
 
-    static String prefix = "syzhao.";
+    static String prefix = "SYZHAO.";
 
     // You must use the following variable as the JDBC connection
     Connection oracleConnection = null;

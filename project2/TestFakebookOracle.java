@@ -18,15 +18,15 @@ public class TestFakebookOracle {
             FakebookOracle fbwz = new MyFakebookOracle(dataType, conn);
             OutputStreamWriter out = new OutputStreamWriter(System.out);
 
-            // // Query 0
-            // out.write(">>>>>>>>>Query0>>>>>>>>>>\n");
-            // fbwz.findMonthOfBirthInfo();
-            // fbwz.printMonthOfBirthInfo(out);
+            // Query 0
+            out.write(">>>>>>>>>Query0>>>>>>>>>>\n");
+            fbwz.findMonthOfBirthInfo();
+            fbwz.printMonthOfBirthInfo(out);
 
-            // Query 1
-            out.write(">>>>>>>>>Query1>>>>>>>>>>\n");
-            fbwz.findNameInfo();
-            fbwz.printNameInfo(out);
+            // // Query 1
+            // out.write(">>>>>>>>>Query1>>>>>>>>>>\n");
+            // fbwz.findNameInfo();
+            // fbwz.printNameInfo(out);
 
             // // Query 2
             // out.write(">>>>>>>>>Query2>>>>>>>>>>\n");
