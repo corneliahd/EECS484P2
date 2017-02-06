@@ -418,15 +418,14 @@ public class MyFakebookOracle extends FakebookOracle {
                 ResultSet rs = stm.executeQuery("SELECT U1.FIRST_NAME, U1.LAST_NAME, U2.FIRST_NAME, U2.LAST_NAME FROM " +
                     userTableName + " U1," +
                     userTableName + " U2 WHERE U1.USER_ID = " + user1_id + " AND U2.USER_ID = " + user2_id);
-                while(rs.next())
-                {
-                    String user1FirstName = rs.getString(1);
-                    String user1LastName = rs.getString(2);
-                    String user2FirstName = rs.getString(3);
-                    String user2LastName = rs.getString(4);
-                }
-                close(rs);
-                close(stm);
+                
+                rs.next();
+                String user1FirstName = rs.getString(1);
+                String user1LastName = rs.getString(2);
+                String user2FirstName = rs.getString(3);
+                String user2LastName = rs.getString(4);
+                rs.close();
+                stm.close();
                 UsersPair p = new UsersPair(user1_id, user1FirstName, user1LastName, user2_id, user2FirstName, user2LastName);
 
                 Statement st = oracleConnection.createStatement();
@@ -445,8 +444,8 @@ public class MyFakebookOracle extends FakebookOracle {
                     
                 }
                 this.suggestedUsersPairs.add(p);
-                close(r);
-                close(st);
+                r.close();
+                st.close();
             }
             rst.close();
             stmt.close();
