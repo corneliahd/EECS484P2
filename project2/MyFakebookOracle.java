@@ -420,7 +420,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 userTableName + " U, (SELECT F.USER2_ID AS USER_ID FROM " + 
                 friendsTableName + " F WHERE F.USER1_ID = " + 
                 user_id + " UNION SELECT F.USER1_ID AS USER_ID FROM " + 
-                friendsTableName + " F WHEREF.USER2_ID = " + 
+                friendsTableName + " F WHERE F.USER2_ID = " + 
                 user_id + " )F WHERE F.USER_ID = U.USER_ID ORDER BY U.YEAR_OF_BIRTH DESC, U.MONTH_OF_BIRTH DESC, U.DAY_OF_BIRTH DESC, U.USER_ID ASC");
 
             while (rst.next()) 
