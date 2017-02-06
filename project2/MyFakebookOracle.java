@@ -400,32 +400,32 @@ public class MyFakebookOracle extends FakebookOracle {
 
         try (Statement stmt = oracleConnection.createStatement()) 
         {
-            ResultSet rst = stmt.executeQuery("SELECT DISTINCT UID1, UID2, CommonFri FROM(SELECT N.UID1, N.UID2, COUNT(*) AS CommonFri FROM(SELECT F.USER1_ID AS ID1, F.USER2_ID AS ID2 FROM " + 
+            ResultSet rst = stmt.executeQuery("SELECT DISTINCT A.UID1, U1.FIRST_NAME, U1.LAST_NAME, A.UID2, U2.FIRST_NAME, U2.LAST_NAME, A.CommonFri FROM " + 
+                userTableName + " U1, " + userTableName + " U2, (SELECT F.USER1_ID AS ID1, F.USER2_ID AS ID2 FROM " + 
                 friendsTableName + " F UNION SELECT F.USER2_ID AS ID1, F.USER1_ID AS ID2 FROM " + 
                 friendsTableName + " F)F1, (SELECT F.USER1_ID AS ID1, F.USER2_ID AS ID2 FROM " + 
                 friendsTableName + " F UNION SELECT F.USER2_ID AS ID1, F.USER1_ID AS ID2 FROM " +
                 friendsTableName + " F)F2, (SELECT U1.USER_ID AS UID1, U2.USER_ID AS UID2 FROM " +
                 userTableName + " U1," +
                 userTableName + " U2 WHERE U1.USER_ID < U2.USER_ID MINUS SELECT F.USER1_ID AS UID1, F.USER2_ID AS UID2 FROM " + 
-                friendsTableName + " F)N WHERE N.UID1 = F1.ID1 AND N.UID2 = F2.ID1 AND F1.ID2 = F2.ID2 GROUP BY N.UID1, N.UID2 ORDER BY CommonFri DESC, N.UID1 ASC, N.UID2 ASC) WHERE ROWNUM <= " +
-                n);
+                friendsTableName + " F)N WHERE N.UID1 = F1.ID1 AND N.UID2 = F2.ID1 AND F1.ID2 = F2.ID2 GROUP BY N.UID1, N.UID2 ORDER BY CommonFri DESC, N.UID1 ASC, N.UID2 ASC) WHERE U1.USER_ID = A.UID1 AND U2.USER_ID = A.UID2 AND ROWNUM <= " +
+                n + " ORDER BY A.CommonFri DESC, A.UID1 ASC, A.UID2 ASC ");
 
             while (rst.next()) 
             {
                 Long user1_id = rst.getLong(1);
-                Long user2_id = rst.getLong(2);
-                Statement stm = oracleConnection.createStatement();
-                ResultSet rs = stm.executeQuery("SELECT U1.FIRST_NAME, U1.LAST_NAME, U2.FIRST_NAME, U2.LAST_NAME FROM " +
-                    userTableName + " U1," +
-                    userTableName + " U2 WHERE U1.USER_ID = " + user1_id + " AND U2.USER_ID = " + user2_id);
-
-                rs.next();
-                String user1FirstName = rs.getString(1);
-                String user1LastName = rs.getString(2);
-                String user2FirstName = rs.getString(3);
-                String user2LastName = rs.getString(4);
-                rs.close();
-                stm.close();
+                String user1FirstName = rs.getString(2);
+                String user1LastName = rs.getString(3);
+                Long user2_id = rst.getLong(4);
+                String user2FirstName = rs.getString(5);
+                String user2LastName = rs.getString(6);
+                // Statement stm = oracleConnection.createStatement();
+                // ResultSet rs = stm.executeQuery("SELECT U1.FIRST_NAME, U1.LAST_NAME, U2.FIRST_NAME, U2.LAST_NAME FROM " +
+                //     userTableName + " U1," +
+                //     userTableName + " U2 WHERE U1.USER_ID = " + user1_id + " AND U2.USER_ID = " + user2_id);
+                // rs.next();
+                // rs.close();
+                // stm.close();
                 UsersPair p = new UsersPair(user1_id, user1FirstName, user1LastName, user2_id, user2FirstName, user2LastName);
 
                 Statement st = oracleConnection.createStatement();
