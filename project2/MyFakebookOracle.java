@@ -408,8 +408,8 @@ public class MyFakebookOracle extends FakebookOracle {
                 friendsTableName + " F)F2, (SELECT U1.USER_ID AS UID1, U2.USER_ID AS UID2 FROM " +
                 userTableName + " U1," +
                 userTableName + " U2 WHERE U1.USER_ID < U2.USER_ID MINUS SELECT F.USER1_ID AS UID1, F.USER2_ID AS UID2 FROM " + 
-                friendsTableName + " F)N WHERE N.UID1 = F1.ID1 AND N.UID2 = F2.ID1 AND F1.ID2 = F2.ID2 GROUP BY N.UID1, N.UID2 ORDER BY CommonFri DESC, N.UID1 ASC, N.UID2 ASC) WHERE U1.USER_ID = A.UID1 AND U2.USER_ID = A.UID2 AND ROWNUM <= " +
-                n + " ORDER BY A.CommonFri DESC, A.UID1 ASC, A.UID2 ASC ");
+                friendsTableName + " F)N WHERE N.UID1 = F1.ID1 AND N.UID2 = F2.ID1 AND F1.ID2 = F2.ID2 GROUP BY N.UID1, N.UID2 ORDER BY CommonFri DESC, N.UID1 ASC, N.UID2 ASC)A WHERE U1.USER_ID = A.UID1 AND U2.USER_ID = A.UID2 AND ROWNUM <= " +
+                n + " ORDER BY A.CommonFri DESC, A.UID1 ASC, A.UID2 ASC");
 
             while (rst.next()) 
             {
