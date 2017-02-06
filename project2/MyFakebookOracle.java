@@ -136,7 +136,7 @@ public class MyFakebookOracle extends FakebookOracle {
 
             int max = 0;
             while (rst.next()) {
-                int firstname = rst.getInt(1);
+                String firstname = rst.getInt(1);
                 int length = rst.getInt(2);
                 if (rst.isFirst()){
                     max = length;
@@ -152,7 +152,7 @@ public class MyFakebookOracle extends FakebookOracle {
 
             int min = 0;
             while (rst.previous()) {
-                int firstname = rst.getInt(1);
+                String firstname = rst.getInt(1);
                 int length = rst.getInt(2);
                 if (rst.isLast()){
                     min = length;
@@ -164,8 +164,6 @@ public class MyFakebookOracle extends FakebookOracle {
                 this.shortestFirstNames.add(firstname);
             }
 
-            this.mostCommonFirstNames.add("");
-            this.mostCommonFirstNames.add("");
             this.mostCommonFirstNamesCount = 0;
 
             // Get the names of users born in the "most" month
