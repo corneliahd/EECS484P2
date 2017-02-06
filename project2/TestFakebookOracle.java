@@ -38,7 +38,7 @@ public class TestFakebookOracle {
             // fbwz.liveAwayFromHome();
             // fbwz.printLiveAwayFromHome(out);
 
-            Query 4
+            // Query 4
             out.write(">>>>>>>>>Query4>>>>>>>>>>\n");
             fbwz.findPhotosWithMostTags(5);
             fbwz.printPhotosWithMostTags(out);
