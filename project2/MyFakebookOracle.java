@@ -275,7 +275,6 @@ public class MyFakebookOracle extends FakebookOracle {
                 String albumName = rst.getString(3);
                 String photoCaption = rst.getString(4);
                 String photoLink = rst.getString(5);
-                System.out.println(photoId);
                 PhotoInfo p = new PhotoInfo(photoId, albumId, albumName, photoCaption, photoLink);
                 TaggedPhotoInfo tp = new TaggedPhotoInfo(p);
                 Statement stm = oracleConnection.createStatement();
