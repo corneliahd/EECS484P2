@@ -336,8 +336,9 @@ public class MyFakebookOracle extends FakebookOracle {
                 String u2LastName = rst.getString(7);
                 int u2Year = rst.getInt(8);
                 MatchPair mp = new MatchPair(u1UserId, u1FirstName, u1LastName, u1Year, u2UserId, u2FirstName, u2LastName, u2Year);
+
                 Statement stm = oracleConnection.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT P.PHOTO_ID, P.ALBUM_ID, A.ALBUM_NAME, P.PHOTO_CAPTION, P.PHOTO_LINK FROM " + 
+                ResultSet rs = stm.executeQuery("SELECT P.PHOTO_ID, P.ALBUM_ID, A.ALBUM_NAME, P.PHOTO_CAPTION, P.PHOTO_LINK FROM " + 
                     photoTableName + " P," + 
                     tagTableName + " T1," + 
                     tagTableName + " T2," +
