@@ -136,7 +136,7 @@ public class MyFakebookOracle extends FakebookOracle {
 
             int max = 0;
             while (rst.next()) {
-                String firstname = rst.getInt(1);
+                String firstname = rst.getString(1);
                 int length = rst.getInt(2);
                 if (rst.isFirst()){
                     max = length;
@@ -152,7 +152,7 @@ public class MyFakebookOracle extends FakebookOracle {
 
             int min = 0;
             while (rst.previous()) {
-                String firstname = rst.getInt(1);
+                String firstname = rst.getString(1);
                 int length = rst.getInt(2);
                 if (rst.isLast()){
                     min = length;
@@ -170,16 +170,16 @@ public class MyFakebookOracle extends FakebookOracle {
             rst = stmt.executeQuery("SELECT U.first_name, COUNT(*) as numofName FROM"
                 + userTableName +" U GROUP BY U.first_name ORDER BY numofName DESC");
 
-            int max = 0;
+            int maxi = 0;
             while (rst.next()) {
-                int firstname = rst.getInt(1);
+                String firstname = rst.getString(1);
                 int length = rst.getInt(2);
                 if (rst.isFirst()){
-                    max = length;
-                    this.mostCommonFirstNamesCount = max;
+                    maxi = length;
+                    this.mostCommonFirstNamesCount = maxi;
                 }
                 else{
-                    if(length != max)
+                    if(length != maxi)
                         break;
                 }
                 this.mostCommonFirstNames.add(firstname);
