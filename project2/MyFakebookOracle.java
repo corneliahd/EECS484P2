@@ -265,6 +265,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 + albumTableName + " A WHERE P.PHOTO_ID = T.TAG_PHOTO_ID AND P.ALBUM_ID = A.ALBUM_ID AND T.TAG_PHOTO_ID = ANY( SELECT DISTINCT TAG_PHOTO_ID FROM( SELECT DISTINCT T.TAG_PHOTO_ID, COUNT(T.TAG_PHOTO_ID) AS TAGNUM FROM "
                 + tagTableName +" T GROUP BY T.TAG_PHOTO_ID ORDER BY TAGNUM DESC, T.TAG_PHOTO_ID ASC ) WHERE ROWNUM <= 5) ORDER BY T.TAG_PHOTO_ID ASC");
             
+            rst.next();
             while (rst.next()){
                 String photoId = rst.getString(1);
                 String albumId = rst.getString(2);
