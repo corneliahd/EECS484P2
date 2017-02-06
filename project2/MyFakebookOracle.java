@@ -421,9 +421,9 @@ public class MyFakebookOracle extends FakebookOracle {
                 ResultSet r = st.executeQuery("SELECT A.ID, U.FIRST_NAME, U.LAST_NAME FROM " +
                     userTableName + " U, ( ( SELECT F1.USER2_ID AS ID FROM " +
                     friendsTableName + " F1, " +
-                    friendsTableName + " F2 WHERE F1.USER1_ID = " + user1_id + " AND F2.USER1_ID = " + user2_id + " AND F1.USER2_ID = F2.USER2_ID ) UNION ( SELECT F1.USER1_ID AS ID FROM " +
+                    friendsTableName + " F2 WHERE F1.USER1_ID = " + user1_id + " AND F2.USER1_ID = " + user1_id + " AND F1.USER2_ID = F2.USER2_ID ) UNION ( SELECT F1.USER1_ID AS ID FROM " +
                     friendsTableName + " F1, " +
-                    friendsTableName + " F2 WHERE F1.USER2_ID = " + user1_id + " AND F2.USER2_ID = " + user2_id + " AND F1.USER1_ID = F2.USER1_ID ) )A WHERE U.USER_ID = A.ID ORDER BY A.ID");
+                    friendsTableName + " F2 WHERE F1.USER2_ID = " + user2_id + " AND F2.USER2_ID = " + user2_id + " AND F1.USER1_ID = F2.USER1_ID ) )A WHERE U.USER_ID = A.ID ORDER BY A.ID");
 
                 while(r.next())
                 { 
