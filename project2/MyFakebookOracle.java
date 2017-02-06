@@ -137,10 +137,9 @@ public class MyFakebookOracle extends FakebookOracle {
             int max = 0;
 
             rst.last();
-            rst.previous();
             int min = rst.getInt(2);
 
-            rst.first();
+            rst.beforeFirst();
             while (rst.next()) {
                 String firstname = rst.getString(1);
                 int length = rst.getInt(2);
