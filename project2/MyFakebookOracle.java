@@ -135,35 +135,26 @@ public class MyFakebookOracle extends FakebookOracle {
                 + userTableName + " U GROUP BY U.first_name ORDER BY LengthofFirstname DESC");
 
             int max = 0;
+
+            rst.last();
+            rst.previous();
+            int min = rst.getInt(2);
+
+            rst.first();
             while (rst.next()) {
                 String firstname = rst.getString(1);
                 int length = rst.getInt(2);
                 if (rst.isFirst()){
                     max = length;
+                    min = max;
+                    this.longestFirstNames.add(firstname);
                 }
                 else{
-                    if(length != max)
-                        break;
+                    if(length == max)
+                        this.longestFirstNames.add(firstname);
+                    if(length == min)
+                        this.shortestFirstNames.add(firstname);
                 }
-                this.longestFirstNames.add(firstname);
-            }
-
-            rst.last();
-
-            int min = 0;
-            while (rst.previous()) {
-                String firstname = rst.getString(1);
-                int length = rst.getInt(2);
-                System.out.println(length);
-                System.out.println(firstname);
-                if (rst.isFirst()){
-                    min = length;
-                }
-                else{
-                    if(length != min)
-                        break;
-                }
-                this.shortestFirstNames.add(firstname);
             }
 
             this.mostCommonFirstNamesCount = 0;
