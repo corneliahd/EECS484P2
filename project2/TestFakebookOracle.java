@@ -43,15 +43,15 @@ public class TestFakebookOracle {
             // fbwz.findPhotosWithMostTags(5);
             // fbwz.printPhotosWithMostTags(out);
 
-            // Query 5
-            out.write(">>>>>>>>>Query5>>>>>>>>>>\n");
-            fbwz.matchMaker(5, 2);
-            fbwz.printBestMatches(out);
+            // // Query 5
+            // out.write(">>>>>>>>>Query5>>>>>>>>>>\n");
+            // fbwz.matchMaker(5, 2);
+            // fbwz.printBestMatches(out);
 
-            // // Query 6
-            // out.write(">>>>>>>>>Query6>>>>>>>>>>\n");
-            // fbwz.suggestFriendsByMutualFriends(5);
-            // fbwz.printMutualFriendsInfo(out);
+            // Query 6
+            out.write(">>>>>>>>>Query6>>>>>>>>>>\n");
+            fbwz.suggestFriendsByMutualFriends(5);
+            fbwz.printMutualFriendsInfo(out);
 
             // Query 7
             // out.write(">>>>>>>>>Query7>>>>>>>>>>\n");

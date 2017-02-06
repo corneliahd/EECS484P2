@@ -383,19 +383,80 @@ public class MyFakebookOracle extends FakebookOracle {
     // If there are still ties, give priority to the pair with the smaller user2_id.
     //
     @Override
-    public void suggestFriendsByMutualFriends(int n) {
-        Long user1_id = 123L;
-        String user1FirstName = "User1FirstName";
-        String user1LastName = "User1LastName";
-        Long user2_id = 456L;
-        String user2FirstName = "User2FirstName";
-        String user2LastName = "User2LastName";
-        UsersPair p = new UsersPair(user1_id, user1FirstName, user1LastName, user2_id, user2FirstName, user2LastName);
 
-        p.addSharedFriend(567L, "sharedFriend1FirstName", "sharedFriend1LastName");
-        p.addSharedFriend(678L, "sharedFriend2FirstName", "sharedFriend2LastName");
-        p.addSharedFriend(789L, "sharedFriend3FirstName", "sharedFriend3LastName");
-        this.suggestedUsersPairs.add(p);
+    public void suggestFriendsByMutualFriends(int n) {
+        // Long user1_id = 123L;
+        // String user1FirstName = "User1FirstName";
+        // String user1LastName = "User1LastName";
+        // Long user2_id = 456L;
+        // String user2FirstName = "User2FirstName";
+        // String user2LastName = "User2LastName";
+        // UsersPair p = new UsersPair(user1_id, user1FirstName, user1LastName, user2_id, user2FirstName, user2LastName);
+
+        // p.addSharedFriend(567L, "sharedFriend1FirstName", "sharedFriend1LastName");
+        // p.addSharedFriend(678L, "sharedFriend2FirstName", "sharedFriend2LastName");
+        // p.addSharedFriend(789L, "sharedFriend3FirstName", "sharedFriend3LastName");
+        // this.suggestedUsersPairs.add(p);
+
+        try (Statement stmt = oracleConnection.createStatement()) 
+        {
+            ResultSet rst = stmt.executeQuery("SELECT DISTINCT UID1, UID2, CommonFri FROM(SELECT N.UID1, N.UID2, COUNT(*) AS CommonFri FROM(SELECT F.USER1_ID AS ID1, F.USER2_ID AS ID2 FROM " + 
+                friendsTableName + " F UNION SELECT F.USER2_ID AS ID1, F.USER1_ID AS ID2 FROM " + 
+                friendsTableName + " F)F1, (SELECT F.USER1_ID AS ID1, F.USER2_ID AS ID2 FROM " + 
+                friendsTableName + " F UNION SELECT F.USER2_ID AS ID1, F.USER1_ID AS ID2 FROM " +
+                friendsTableName + " F)F2, (SELECT U1.USER_ID AS UID1, U2.USER_ID AS UID2 FROM " +
+                userTableName + " U1," +
+                userTableName + " U2 WHERE U1.USER_ID < U2.USER_ID MINUS SELECT F.USER1_ID AS UID1, F.USER2_ID AS UID2 FROM " + 
+                friendsTableName + " F)N WHERE N.UID1 = F1.ID1 AND N.UID2 = F2.ID1 AND F1.ID2 = F2.ID2 GROUP BY N.UID1, N.UID2 ORDER BY CommonFri DESC, N.UID1 ASC, N.UID2 ASC) WHERE ROWNUM <= " +
+                n);
+
+            while (rst.next()) 
+            {
+                Long user1_id = rst.getLong(1);
+                Long user2_id = rst.getLong(2);
+                Statement stm = oracleConnection.createStatement();
+                ResultSet rs = stm.executeQuery("SELECT U1.FIRST_NAME, U1.LAST_NAME, U2.FIRST_NAME, U2.LAST_NAME FROM " +
+                    userTableName + " U1," +
+                    userTableName + " U2 WHERE U1.USER_ID = " + user1_id + " AND U2.USER_ID = " + user2_id);
+                while(rs.next())
+                {
+                    String user1FirstName = rs.getString(1);
+                    String user1LastName = rs.getString(2);
+                    String user2FirstName = rs.getString(3);
+                    String user2LastName = rs.getString(4);
+                }
+                close(rs);
+                close(stm);
+                UsersPair p = new UsersPair(user1_id, user1FirstName, user1LastName, user2_id, user2FirstName, user2LastName);
+
+                Statement st = oracleConnection.createStatement();
+                ResultSet r = st.executeQuery("SELECT A.ID, U.FIRST_NAME, U.LAST_NAME FROM " +
+                    userTableName + " U, (((SELECT USER2_ID AS ID FROM " + 
+                    friendsTableName + " F WHERE F.USER1_ID = 109) UNION (SELECT USER1_ID AS ID FROM " +
+                    friendsTableName + " F WHERE F.USER2_ID = 109)) INTERSECT ((SELECT USER2_ID AS ID FROM " +
+                    friendsTableName + " F WHERE F.USER1_ID = 122) UNION (SELECT USER1_ID AS ID FROM " +
+                    friendsTableName + " F WHERE F.USER2_ID = 122)))A WHERE U.USER_ID = A.ID ORDER BY A.ID");
+                while(r.next())
+                { 
+                    Long uid = r.getLong(1);
+                    String firstName = r.getString(2);
+                    String lastName = r.getString(3);
+                    p.addSharedFriend(uid, firstName, lastName);
+                    
+                }
+                this.suggestedUsersPairs.add(p);
+                close(r);
+                close(st);
+            }
+            rst.close();
+            stmt.close();
+        } 
+        catch (SQLException err) 
+        {
+            System.err.println(err.getMessage());
+        }
+
+
     }
 
     @Override
