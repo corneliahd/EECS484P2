@@ -314,24 +314,59 @@ public class MyFakebookOracle extends FakebookOracle {
     // (iii) If there are still ties, choose the pair with the smaller user2_id
     //
     public void matchMaker(int n, int yearDiff) {
-        Long u1UserId = 123L;
-        String u1FirstName = "u1FirstName";
-        String u1LastName = "u1LastName";
-        int u1Year = 1988;
-        Long u2UserId = 456L;
-        String u2FirstName = "u2FirstName";
-        String u2LastName = "u2LastName";
-        int u2Year = 1986;
-        MatchPair mp = new MatchPair(u1UserId, u1FirstName, u1LastName,
-                u1Year, u2UserId, u2FirstName, u2LastName, u2Year);
-        String sharedPhotoId = "12345678";
-        String sharedPhotoAlbumId = "123456789";
-        String sharedPhotoAlbumName = "albumName";
-        String sharedPhotoCaption = "caption";
-        String sharedPhotoLink = "link";
-        mp.addSharedPhoto(new PhotoInfo(sharedPhotoId, sharedPhotoAlbumId,
-                sharedPhotoAlbumName, sharedPhotoCaption, sharedPhotoLink));
-        this.bestMatches.add(mp);
+
+        try (Statement stmt = oracleConnection.createStatement()) 
+        {
+            ResultSet rst = stmt.executeQuery("SELECT U1.USER_ID, U1.FIRST_NAME, U1.LAST_NAME, U1.YEAR_OF_BIRTH, U2.USER_ID, U2.FIRST_NAME, U2.LAST_NAME, U2.YEAR_OF_BIRTH FROM " + 
+                userTableName + " U1," + 
+                userTableName + " U2, (SELECT ID1, ID2 FROM(SELECT T1.TAG_SUBJECT_ID AS ID1, T2.TAG_SUBJECT_ID AS ID2 FROM " + 
+                tagTableName + " T1," + 
+                tagTableName + " T2 WHERE T1.TAG_SUBJECT_ID < T2.TAG_SUBJECT_ID AND T1.TAG_PHOTO_ID = T2.TAG_PHOTO_ID MINUS SELECT F.USER1_ID, F.USER2_ID FROM " + 
+                friendsTableName + " F) GROUP BY ID1, ID2 ORDER BY ID1 ASC, ID2 ASC)A WHERE A.ID1 = U1.USER_ID AND A.ID2 = U2.USER_ID AND U1.GENDER = U2.GENDER AND ABS(U1.YEAR_OF_BIRTH - U2.YEAR_OF_BIRTH) <= " + 
+                yearDiff + " AND ROWNUM <= " + n);
+
+            while (rst.next()) 
+            {
+                Long u1UserId = rst.getLong(1);
+                String u1FirstName = rst.getString(2);
+                String u1LastName = rst.getString(3);
+                int u1Year = rst.getInt(4);
+                Long u2UserId = rst.getLong(5);
+                String u2FirstName = rst.getString(6);
+                String u2LastName = rst.getString(7);
+                int u2Year = rst.getInt(8);
+                MatchPair mp = new MatchPair(u1UserId, u1FirstName, u1LastName, u1Year, u2UserId, u2FirstName, u2LastName, u2Year);
+                Statement stm = oracleConnection.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT P.PHOTO_ID, P.ALBUM_ID, A.ALBUM_NAME, P.PHOTO_CAPTION, P.PHOTO_LINK FROM " + 
+                    photoTableName + " P," + 
+                    tagTableName + " T1," + 
+                    tagTableName + " T2," +
+                    albumTableName + " A WHERE T1.TAG_SUBJECT_ID = " + 
+                    u1UserId + " AND T2.TAG_SUBJECT_ID = " + 
+                    u2UserId + " AND T1.TAG_PHOTO_ID = T2.TAG_PHOTO_ID AND T1.TAG_PHOTO_ID = P.PHOTO_ID AND P.ALBUM_ID = A.ALBUM_ID");
+                while (rst.next()) 
+                {
+                    String sharedPhotoId = rst.getString(1);
+                    String sharedPhotoAlbumId = rst.getString(2);
+                    String sharedPhotoAlbumName = rst.getString(3);
+                    String sharedPhotoCaption = rst.getString(4);
+                    String sharedPhotoLink = rst.getString(5);
+                    mp.addSharedPhoto(new PhotoInfo(sharedPhotoId, sharedPhotoAlbumId,
+                    sharedPhotoAlbumName, sharedPhotoCaption, sharedPhotoLink));
+                    this.bestMatches.add(mp);
+                }
+                rs.close();
+                stm.close();
+
+            }
+            rst.close();
+            stmt.close();
+
+        } 
+        catch (SQLException err) 
+        {
+            System.err.println(err.getMessage());
+        }
     }
 
     // **** Query 6 ****
@@ -454,7 +489,7 @@ public class MyFakebookOracle extends FakebookOracle {
     //
     //
     public void findPotentialSiblings() {
-        
+
         try (Statement stmt = oracleConnection.createStatement()) 
         {
             ResultSet rst = stmt.executeQuery("SELECT U1.USER_ID AS USER1_ID, U1.FIRST_NAME, U1.LAST_NAME, U2.USER_ID AS USER2_ID, U2.FIRST_NAME, U2.LAST_NAME FROM " +
