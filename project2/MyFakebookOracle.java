@@ -146,7 +146,6 @@ public class MyFakebookOracle extends FakebookOracle {
                 int length = rst.getInt(2);
                 if (rst.isFirst()){
                     max = length;
-                    min = max;
                     this.longestFirstNames.add(firstname);
                 }
                 else{
