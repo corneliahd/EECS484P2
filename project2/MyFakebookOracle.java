@@ -384,11 +384,11 @@ public class MyFakebookOracle extends FakebookOracle {
             this.popularStateNames.add(stateName);
 
             while (rst.next()) {
-                String stateName = rst.getString(1);
-                int count = rst.getInt(2);
+                stateName = rst.getString(1);
+                count = rst.getInt(2);
                 if(count != maxi)
                     break;
-                this.eventCount = count;
+                this.eventCount = co;
                 this.popularStateNames.add(stateName);
             }
             rst.close();
