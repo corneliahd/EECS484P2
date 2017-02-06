@@ -265,7 +265,6 @@ public class MyFakebookOracle extends FakebookOracle {
                 + albumTableName + " A WHERE P.PHOTO_ID = T.TAG_PHOTO_ID AND P.ALBUM_ID = A.ALBUM_ID AND T.TAG_PHOTO_ID = ANY( SELECT DISTINCT TAG_PHOTO_ID FROM( SELECT DISTINCT T.TAG_PHOTO_ID, COUNT(T.TAG_PHOTO_ID) AS TAGNUM FROM "
                 + tagTableName +" T GROUP BY T.TAG_PHOTO_ID ORDER BY TAGNUM DESC, T.TAG_PHOTO_ID ASC ) WHERE ROWNUM <= 5) ORDER BY T.TAG_PHOTO_ID ASC");
             
-            rst.next();
             while (rst.next()){
                 String photoId = rst.getString(1);
                 String albumId = rst.getString(2);
@@ -275,7 +274,8 @@ public class MyFakebookOracle extends FakebookOracle {
                 System.out.println(photoId);
                 PhotoInfo p = new PhotoInfo(photoId, albumId, albumName, photoCaption, photoLink);
                 TaggedPhotoInfo tp = new TaggedPhotoInfo(p);
-                ResultSet rs = stmt.executeQuery("SELECT U.USER_ID, U.FIRST_NAME, U.LAST_NAME FROM "
+                Statement stm = oracleConnection.createStatement();
+                ResultSet rs = stm.executeQuery("SELECT U.USER_ID, U.FIRST_NAME, U.LAST_NAME FROM "
                     + tagTableName +" T, "+ userTableName +" U WHERE T.TAG_PHOTO_ID = '"+ photoId +"' AND T.TAG_SUBJECT_ID = U.USER_ID");
                 while (rs.next()){
                     Long uid = rs.getLong(1);
