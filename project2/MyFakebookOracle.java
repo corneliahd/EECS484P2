@@ -351,10 +351,9 @@ public class MyFakebookOracle extends FakebookOracle {
                     String sharedPhotoAlbumName = rst.getString(3);
                     String sharedPhotoCaption = rst.getString(4);
                     String sharedPhotoLink = rst.getString(5);
-                    mp.addSharedPhoto(new PhotoInfo(sharedPhotoId, sharedPhotoAlbumId,
-                    sharedPhotoAlbumName, sharedPhotoCaption, sharedPhotoLink));
-                    this.bestMatches.add(mp);
+                    mp.addSharedPhoto(new PhotoInfo(sharedPhotoId, sharedPhotoAlbumId, sharedPhotoAlbumName, sharedPhotoCaption, sharedPhotoLink));
                 }
+                this.bestMatches.add(mp);
                 rs.close();
                 stm.close();
 
