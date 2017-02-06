@@ -274,7 +274,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 PhotoInfo p = new PhotoInfo(photoId, albumId, albumName, photoCaption, photoLink);
                 TaggedPhotoInfo tp = new TaggedPhotoInfo(p);
                 ResultSet rs = stmt.executeQuery("SELECT U.USER_ID, U.FIRST_NAME, U.LAST_NAME FROM "
-                    + tagTableName +" T, "+ userTableName +" U WHERE T.PHOTO_ID = '"+ photoId +"' AND T.TAG_SUBJECT_ID = U.USER_ID");
+                    + tagTableName +" T, "+ userTableName +" U WHERE T.TAG_PHOTO_ID = '"+ photoId +"' AND T.TAG_SUBJECT_ID = U.USER_ID");
                 while (rs.next()){
                     Long uid = rs.getLong(1);
                     String firstname = rs.getString(2);
