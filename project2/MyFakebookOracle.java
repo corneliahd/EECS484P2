@@ -271,6 +271,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 String albumName = rst.getString(3);
                 String photoCaption = rst.getString(4);
                 String photoLink = rst.getString(5);
+                System.out.println(photoId);
                 PhotoInfo p = new PhotoInfo(photoId, albumId, albumName, photoCaption, photoLink);
                 TaggedPhotoInfo tp = new TaggedPhotoInfo(p);
                 ResultSet rs = stmt.executeQuery("SELECT U.USER_ID, U.FIRST_NAME, U.LAST_NAME FROM "
