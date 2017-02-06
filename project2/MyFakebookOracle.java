@@ -167,7 +167,7 @@ public class MyFakebookOracle extends FakebookOracle {
             this.mostCommonFirstNamesCount = 0;
 
             // Get the names of users born in the "most" month
-            rst = stmt.executeQuery("SELECT U.first_name, COUNT(*) as numofName FROM"
+            rst = stmt.executeQuery("SELECT U.first_name, COUNT(*) as numofName FROM "
                 + userTableName +" U GROUP BY U.first_name ORDER BY numofName DESC");
 
             int maxi = 0;
