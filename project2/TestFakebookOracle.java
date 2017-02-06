@@ -59,14 +59,14 @@ public class TestFakebookOracle {
             // fbwz.printStateNames(out);
 
             // Query 8
-            out.write(">>>>>>>>>Query8>>>>>>>>>>\n");
-            fbwz.findAgeInfo(215L);
-            fbwz.printAgeInfo(out);
+            // out.write(">>>>>>>>>Query8>>>>>>>>>>\n");
+            // fbwz.findAgeInfo(215L);
+            // fbwz.printAgeInfo(out);
 
             // // Query 9
-            // out.write(">>>>>>>>>Query9>>>>>>>>>>\n");
-            // fbwz.findPotentialSiblings();
-            // fbwz.printPotentialSiblings(out);
+            out.write(">>>>>>>>>Query9>>>>>>>>>>\n");
+            fbwz.findPotentialSiblings();
+            fbwz.printPotentialSiblings(out);
 
 
             conn.close();
