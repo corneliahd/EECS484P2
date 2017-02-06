@@ -263,7 +263,7 @@ public class MyFakebookOracle extends FakebookOracle {
             ResultSet rst = stmt.executeQuery("SELECT DISTINCT T.TAG_PHOTO_ID, A.ALBUM_ID, A.ALBUM_NAME, P.PHOTO_CAPTION, P.PHOTO_LINK FROM "
                 +tagTableName+" T, "+photoTableName+" P, "
                 +albumTableName+" A WHERE P.PHOTO_ID = T.TAG_PHOTO_ID AND P.ALBUM_ID = A.ALBUM_ID AND T.TAG_PHOTO_ID = ANY( SELECT DISTINCT TAG_PHOTO_ID FROM(  SELECT DISTINCT T.TAG_PHOTO_ID, COUNT(T.TAG_PHOTO_ID) AS TAGNUM FROM "
-                +tagTableName+" T GROUP BY T.TAG_PHOTO_ID ORDER BY TAGNUM DESC, T.TAG_PHOTO_ID ASC ) WHERE ROWNUM <= 5) ORDER BY T.TAG_PHOTO_ID ASC");
+                +tagTableName+" T GROUP BY T.TAG_PHOTO_ID ORDER BY TAGNUM DESC, T.TAG_PHOTO_ID ASC ) WHERE ROWNUM <= "+ n +") ORDER BY T.TAG_PHOTO_ID ASC");
             
             while (rst.next()){
                 Long photoId = rst.getLong(1);
