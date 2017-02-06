@@ -418,7 +418,7 @@ public class MyFakebookOracle extends FakebookOracle {
                 ResultSet rs = stm.executeQuery("SELECT U1.FIRST_NAME, U1.LAST_NAME, U2.FIRST_NAME, U2.LAST_NAME FROM " +
                     userTableName + " U1," +
                     userTableName + " U2 WHERE U1.USER_ID = " + user1_id + " AND U2.USER_ID = " + user2_id);
-                
+
                 rs.next();
                 String user1FirstName = rs.getString(1);
                 String user1LastName = rs.getString(2);
@@ -431,10 +431,10 @@ public class MyFakebookOracle extends FakebookOracle {
                 Statement st = oracleConnection.createStatement();
                 ResultSet r = st.executeQuery("SELECT A.ID, U.FIRST_NAME, U.LAST_NAME FROM " +
                     userTableName + " U, (((SELECT USER2_ID AS ID FROM " + 
-                    friendsTableName + " F WHERE F.USER1_ID = 109) UNION (SELECT USER1_ID AS ID FROM " +
-                    friendsTableName + " F WHERE F.USER2_ID = 109)) INTERSECT ((SELECT USER2_ID AS ID FROM " +
-                    friendsTableName + " F WHERE F.USER1_ID = 122) UNION (SELECT USER1_ID AS ID FROM " +
-                    friendsTableName + " F WHERE F.USER2_ID = 122)))A WHERE U.USER_ID = A.ID ORDER BY A.ID");
+                    friendsTableName + " F WHERE F.USER1_ID = " + user1_id + ") UNION (SELECT USER1_ID AS ID FROM " +
+                    friendsTableName + " F WHERE F.USER2_ID = " + user1_id + ")) INTERSECT ((SELECT USER2_ID AS ID FROM " +
+                    friendsTableName + " F WHERE F.USER1_ID = " + user2_id + ") UNION (SELECT USER1_ID AS ID FROM " +
+                    friendsTableName + " F WHERE F.USER2_ID = " + user2_id + ")))A WHERE U.USER_ID = A.ID ORDER BY A.ID");
                 while(r.next())
                 { 
                     Long uid = r.getLong(1);
