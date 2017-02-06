@@ -208,7 +208,23 @@ public class MyFakebookOracle extends FakebookOracle {
     // (I.e., current_city != hometown_city)
     //
     public void liveAwayFromHome() throws SQLException {
-        this.liveAwayFromHome.add(new UserInfo(11L, "Heather", "Movalot"));
+        try (Statement stmt =
+            oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+                ResultSet.CONCUR_READ_ONLY)) {
+                   
+            ResultSet rst = stmt.executeQuery("SELECT U.user_id, U.first_name, U.last_name FROM "
+                + userTableName +" U, "+ currentCityTableName +" C2, "
+                + hometownCityTableName +" C1 WHERE U.user_id = C1.user_id AND U.user_id = C2.user_id AND C1.hometown_city_id <> C2.current_city_id ORDER BY U.user_id");
+            
+            while (rst.next()){
+                String firstname = rst.getString(2);
+                String lastname = rst.getString(3);
+                this.liveAwayFromHome.add(new UserInfo(11L, firstname, lastname));
+            }
+
+        } catch (SQLException err) {
+                System.err.println(err.getMessage());
+        }
     }
 
     @Override

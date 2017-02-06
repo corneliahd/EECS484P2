@@ -23,20 +23,20 @@ public class TestFakebookOracle {
             // fbwz.findMonthOfBirthInfo();
             // fbwz.printMonthOfBirthInfo(out);
 
-            // Query 1
-            out.write(">>>>>>>>>Query1>>>>>>>>>>\n");
-            fbwz.findNameInfo();
-            fbwz.printNameInfo(out);
+            // // Query 1
+            // out.write(">>>>>>>>>Query1>>>>>>>>>>\n");
+            // fbwz.findNameInfo();
+            // fbwz.printNameInfo(out);
 
             // // Query 2
             // out.write(">>>>>>>>>Query2>>>>>>>>>>\n");
             // fbwz.lonelyUsers();
             // fbwz.printLonelyFriends(out);
 
-            // // Query 3
-            // out.write(">>>>>>>>>Query3>>>>>>>>>>\n");
-            // fbwz.liveAwayFromHome();
-            // fbwz.printLiveAwayFromHome(out);
+            // Query 3
+            out.write(">>>>>>>>>Query3>>>>>>>>>>\n");
+            fbwz.liveAwayFromHome();
+            fbwz.printLiveAwayFromHome(out);
 
             // // Query 4
             // out.write(">>>>>>>>>Query4>>>>>>>>>>\n");
