@@ -131,10 +131,8 @@ public class MyFakebookOracle extends FakebookOracle {
                      oracleConnection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
                              ResultSet.CONCUR_READ_ONLY)) {
             //longest and shortest firstname
-            ResultSet rst = stmt.executeQuery("SELECT U.first_name, LENGTH(U.first_name) as lengthofFirstname
-                                               FROM " + userTableName + " U
-                                               GROUP BY U.first_name
-                                               ORDER BY LengthofFirstname DESC");
+            ResultSet rst = stmt.executeQuery("SELECT U.first_name, LENGTH(U.first_name) as lengthofFirstname FROM " 
+                + userTableName + " U GROUP BY U.first_name ORDER BY LengthofFirstname DESC");
 
             int max = 0;
             while (rst.next()) {
@@ -171,10 +169,8 @@ public class MyFakebookOracle extends FakebookOracle {
             this.mostCommonFirstNamesCount = 0;
 
             // Get the names of users born in the "most" month
-            rst = stmt.executeQuery("SELECT U.first_name, COUNT(*) as numofName
-                                     FROM"+ userTableName +" U
-                                     GROUP BY U.first_name
-                                     ORDER BY numofName DESC");
+            rst = stmt.executeQuery("SELECT U.first_name, COUNT(*) as numofName FROM"
+                + userTableName +" U GROUP BY U.first_name ORDER BY numofName DESC");
 
             int max = 0;
             while (rst.next()) {
