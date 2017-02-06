@@ -217,9 +217,10 @@ public class MyFakebookOracle extends FakebookOracle {
                 + hometownCityTableName +" C1 WHERE U.user_id = C1.user_id AND U.user_id = C2.user_id AND C1.hometown_city_id <> C2.current_city_id ORDER BY U.user_id");
             
             while (rst.next()){
+                Long uid = rst.getLong(1);
                 String firstname = rst.getString(2);
                 String lastname = rst.getString(3);
-                this.liveAwayFromHome.add(new UserInfo(11L, firstname, lastname));
+                this.liveAwayFromHome.add(new UserInfo(uid, firstname, lastname));
             }
 
         } catch (SQLException err) {
