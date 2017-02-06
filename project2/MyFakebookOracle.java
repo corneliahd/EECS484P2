@@ -266,8 +266,8 @@ public class MyFakebookOracle extends FakebookOracle {
                 +tagTableName+" T GROUP BY T.TAG_PHOTO_ID ORDER BY TAGNUM DESC, T.TAG_PHOTO_ID ASC ) WHERE ROWNUM <= "+ n +") ORDER BY T.TAG_PHOTO_ID ASC");
             
             while (rst.next()){
-                Long photoId = rst.getLong(1);
-                Long albumId = rst.getLong(2);
+                String photoId = rst.getString(1);
+                String albumId = rst.getString(2);
                 String albumName = rst.getString(3);
                 String photoCaption = rst.getString(4);
                 String photoLink = rst.getString(5);
