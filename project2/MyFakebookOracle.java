@@ -288,10 +288,6 @@ public class MyFakebookOracle extends FakebookOracle {
         }
     }
 
-
-
-    }
-
     @Override
     // **** Query 5 ****
     // Find suggested "match pairs" of users, using the following criteria:
