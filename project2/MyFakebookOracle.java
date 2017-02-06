@@ -344,7 +344,7 @@ public class MyFakebookOracle extends FakebookOracle {
                     albumTableName + " A WHERE T1.TAG_SUBJECT_ID = " + 
                     u1UserId + " AND T2.TAG_SUBJECT_ID = " + 
                     u2UserId + " AND T1.TAG_PHOTO_ID = T2.TAG_PHOTO_ID AND T1.TAG_PHOTO_ID = P.PHOTO_ID AND P.ALBUM_ID = A.ALBUM_ID");
-                while (rst.next()) 
+                while (rs.next()) 
                 {
                     String sharedPhotoId = rst.getString(1);
                     String sharedPhotoAlbumId = rst.getString(2);
