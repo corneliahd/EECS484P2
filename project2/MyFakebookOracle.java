@@ -198,8 +198,29 @@ public class MyFakebookOracle extends FakebookOracle {
     //
     public void lonelyUsers() {
         // Find the following information from your database and store the information as shown
-        this.lonelyUsers.add(new UserInfo(10L, "Billy", "SmellsFunny"));
-        this.lonelyUsers.add(new UserInfo(11L, "Jenny", "BadBreath"));
+        //this.lonelyUsers.add(new UserInfo(10L, "Billy", "SmellsFunny"));
+        //this.lonelyUsers.add(new UserInfo(11L, "Jenny", "BadBreath"));
+        try (Statement stmt = oracleConnection.createStatement()) 
+        {
+            ResultSet rst = stmt.executeQuery("SELECT USER_ID, FIRST_NAME, LAST_NAME FROM " + 
+                userTableName + " U WHERE USER_ID = ANY(SELECT DISTINCT U1.user_id FROM " + 
+                userTableName + " U1 MINUS SELECT DISTINCT F1.user1_id FROM " + 
+                friendsTableName + " F1 MINUS SELECT DISTINCT F2.user2_id FROM " + 
+                friendsTableName + " F2)");
+
+                while (rst.next()) 
+                {
+                Long uid = rst.getLong(1);
+                String firstName = rst.getString(2);
+                String lastName = rst.getString(3);
+                this.lonelyUsers.add(new UserInfo(uid, firstName, lastName));
+                }
+
+        } 
+        catch (SQLException err) 
+        {
+            System.err.println(err.getMessage());
+        }
     }
 
     @Override
