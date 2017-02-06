@@ -376,7 +376,8 @@ public class MyFakebookOracle extends FakebookOracle {
         {
             ResultSet rst = stmt.executeQuery("SELECT C.STATE_NAME, COUNT(*) AS EVENT_NUM FROM " + 
                 eventTableName + " E," + cityTableName + " C WHERE E.EVENT_CITY_ID = C.CITY_ID GROUP BY C.STATE_NAME ORDER BY EVENT_NUM DESC");
-
+            
+            rst.next();
             String stateName = rst.getString(1);
             int count = rst.getInt(2);
             int maxi = count;
